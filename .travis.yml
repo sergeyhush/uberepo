@@ -2,11 +2,4 @@ language: python
 python:
 - '2.7'
 install: pip install -r requirements.txt
-script: python cli.py -f "/tmp/uberepo_$(python cli.py --version).deb"
-deploy:
-  provider: releases
-  api_key:
-    secure: g9NQBBNWrG5+QDsrTZfBbXpIehCQklSTy/WK8rVMeE0kDZEJyYTZ/ekL/FEdT5Km+BfiX2P8xQHr1Si981qqw57iD/auwj6BcW1lF5+k6ZS9eLrRC7GN0YdpBBs/TOEOApDGmHnVdfFYWLysUeUbThC6/YXiTVJHoKIq+MWqxcLHoyJZpqycM14cIBV8gessjwFaRDMdSMWBOl5lhMwysRIsKWUwzy2vEngC/b/3wvJZnv0zwSkcazxPdoZ0CIg6LhjN5YZeaai9dGb9LA/lRxnSF3FRWnKIntRYRyhp3o+QBr4bgfIcJmWVqMOUAuGYLv9HrtfRX4l7duYXwH27yEBu3ufiyz/shqQNJ9HExb5jhlA7eGaadp9mUTJaTT0DM15hhepkZu00FnBnxetx0F6x3oPyySFxbcPlQbosNncPgJkYtVpZ/tTgtTfevOafdm7bcsiuMn8s2uaCfjluSBUgiwIYvXzHfHX2gCcCMhg29FC/PG8QrHNUaZ6epyF/vwXAtuHor2wslAge2gOL+/vKVgEZVXpfGqDfZW9NBtcCkg8w3tlkRK/EWtPAeSxVClGPYo2eETiBJcGxb0gA3VSeRVh7rYb/Zzx55d0ENC5okYZcnxZT5aEIxIdEge4e0/5ZJKi6jEuV6NdxliQGTIuXC7SOU1/U6U2LoowhFDY=
-  file: "*.deb"
-  on:
-    repo: sergeyhush/uberepo
+script: python cli.py -f "/tmp/uberepo.deb" && dpkg -i "/tmp/uberrepo.deb"

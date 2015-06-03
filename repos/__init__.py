@@ -1,6 +1,7 @@
 __author__ = 'Sergey Sudakovich'
 __version__ = '0.1'
 __pkg__ = 'uberepo'
+__deb__ = __pkg__ + '_' + __version__ + '.deb'
 
 import os
 import tempfile
@@ -105,8 +106,9 @@ class Repo(object):
                 f.write('\n'.join(repo.lists))
 
     @staticmethod
-    def build(pkgdir):
-        debfile = os.path.join(os.path.dirname(pkgdir), __pkg__ + '.deb')
+    def build(pkgdir, debfile=None):
+        if not debfile:
+            debfile = __deb__
         cmd = ['fakeroot', 'dpkg-deb', '--build', pkgdir, debfile]
         devnull = open(os.devnull, 'w')
         subprocess.call(cmd, stdout=devnull, stderr=subprocess.STDOUT)

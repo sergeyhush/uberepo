@@ -2,10 +2,12 @@
 """
 Uber repo
 
-Usage:
-    cli.py
-    cli.py (-h | --help)
-    cli.py --version
+Usage: cli.py [-f FILE]
+
+Options:
+    -h --help   Show help.
+    --version   Show version.
+    -f FILE   Output file.
 """
 from docopt import docopt
 
@@ -15,5 +17,6 @@ if __name__ == '__main__':
     args = docopt(__doc__, version=repos.__version__)
     scratchd = repos.Repo.prep_scratchpad()
     repos.Repo.download_parts(scratchd)
-    print "Generated file: {}".format(repos.Repo.build(scratchd))
+    debfile = args.get('-f')
+    print "Generated file: {}".format(repos.Repo.build(scratchd, debfile))
     # FIXME clenup scratchpad

@@ -13,8 +13,6 @@ import requests
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
-registry = set()
-
 CONTROL_FILE = """Package: {package}
 Architecture: all
 Maintainer: {author}
@@ -29,6 +27,8 @@ POSTINST = """#!/bin/sh
 
 {body}
 """
+
+registry = set()
 
 
 def _aptdir(d):
@@ -59,24 +59,21 @@ def _download_to(url, path):
 
 
 def __import_repos_():
-    def filename(o):
-        return os.path.basename(os.path.splitext(o)[0])
+    import importlib
+    import pkgutil
 
-    modules = set(map(filename, os.listdir(os.path.dirname(__file__))))
-    modules.remove('__init__')
-    for module in modules:
-        __import__('repos.' + module, locals(), globals())
+    path = os.path.dirname(__file__)
+    for _, module, _ in pkgutil.iter_modules(path=[path]):
+        importlib.import_module(__package__ + '.' + module)
 
 
 class MetaRepo(type):
-    registry = set()
-
     def __new__(cls, name, bases, attrs):
         new_cls = type.__new__(cls, name, bases, attrs)
         # if not isinstance(new_cls, repos.Repo)
         if name != 'Repo':
             MetaRepo._validate_class(name, attrs)
-            cls.registry.add((name, new_cls))
+            registry.add((name, new_cls))
         return new_cls
 
     @staticmethod
@@ -86,7 +83,7 @@ class MetaRepo(type):
         #     raise AttributeError('Class {} must define "key" or "keyring"'.format(name))
 
     def __iter__(self):
-        return iter(MetaRepo.registry)
+        return iter(registry)
 
 
 class Repo(object):
@@ -148,7 +145,7 @@ class Repo(object):
         cmd = ['fakeroot', 'dpkg-deb', '--build', pkgdir, debfile]
         devnull = open(os.devnull, 'w')
         retcode = subprocess.call(cmd, stdout=devnull, stderr=subprocess.STDOUT)
-        return (debfile, retcode)
+        return debfile, retcode
 
 
 __import_repos_()

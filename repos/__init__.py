@@ -81,8 +81,9 @@ class MetaRepo(type):
 
     @staticmethod
     def _validate_class(name, attrs):
-        if ('key' not in attrs) and ('keyring' not in attrs):
-            raise AttributeError('Class {} must define "key" or "keyring"'.format(name))
+        pass
+        # if ('key' not in attrs) and ('keyring' not in attrs):
+        #     raise AttributeError('Class {} must define "key" or "keyring"'.format(name))
 
     def __iter__(self):
         return iter(MetaRepo.registry)
